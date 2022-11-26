@@ -1,24 +1,8 @@
-# app
-
-## Project setup
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
+1.第一步
+	npm install
+2.第二步
+	npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### 还有登录注册识别游客和博客，删除文章和修改文章，关于和留言板，最热文章和推荐文章数据，标签接口有误。
