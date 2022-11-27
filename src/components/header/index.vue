@@ -5,7 +5,7 @@
       class="word"
       @click="toHome"
     >
-      <a>个人博客</a>
+      <a style="cursor: pointer;">个人博客</a>
     </div>
     <!-- 搜索框 -->
     <div class="search">

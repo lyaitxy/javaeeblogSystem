@@ -4,7 +4,10 @@
     ref="oneArticle"
   >
     <!-- 侧边栏区 -->
-    <div class="aside">
+    <div
+      class="aside"
+      style="margin-top:20px;"
+    >
       <Aside></Aside>
     </div>
 
