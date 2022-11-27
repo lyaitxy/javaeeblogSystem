@@ -46,9 +46,17 @@
                 </p>
               </div>
             </el-card>
-            <div class="buttonGroup">
-              <span class="operatorArticle">删除文章</span>
-              <span class="operatorArticle">修改文章</span>
+            <div class="buttonGroup" v-show="userInfo.isLogin">
+              <span
+                class="operatorArticle"
+                @click="deleteArt(article.article_id)"
+                >删除文章</span
+              >
+              <span
+                class="operatorArticle"
+                @click="changeArticle(article.article_id)"
+                >修改文章</span
+              >
               <span
                 class="operatorArticle"
                 @click="articleAddTag(article.article_id)"
@@ -65,7 +73,28 @@
     </div>
 
     <!-- 侧边栏小工具 -->
-    <div class="tools">
+    <div >
+      <el-button @click="drawer = true" type="primary" style="margin-left: 16px;" class="tools">
+        点我工具栏
+      </el-button>
+
+      <el-drawer
+        class="elDrawer"
+        title="工具栏"
+        :visible.sync="drawer"
+        :direction="direction"
+        :modal= false
+        >
+        <div class="function">
+          <div class="options" @click="login()">登录</div>
+          <div class="options" @click="signOut()" >退出登录</div>
+          <div class="options" @click="register()">注册</div>
+          <div class="options" @click="exchangeBrightness()">切换亮度</div>
+        </div>
+       
+      </el-drawer>
+
+
       <el-backtop :right="10">
         <i class="el-icon-arrow-up"></i>
       </el-backtop>
@@ -81,6 +110,8 @@ export default {
     return {
       isFirst: -1,
       curClassification: "",
+      drawer: false,
+      direction: "rtl"
     };
   },
   components: {
@@ -160,32 +191,80 @@ export default {
         .catch(() => {});
     },
 
-    // // 删除文章
-    // deleteArt(id) {
-    //   console.log("移除标签");
-    //   this.$alert("确定删除该标签吗？", "提示", {
-    //     confirmButtonText: "确定",
-    //     cancelButtonText: "取消",
-    //     type: "warning",
-    //   })
-    //     .then(() => {
-    //       console.log(art_id, tag_name);
-    //       let data = {
-    //         action: "deleteArticle",
-    //         Art_id: art_id,
-    //       };
-    //       this.$store.dispatch("deleteTagForArt", data).then((res) => {
-    //         //获取所有标签
-    //         this.all();
-    //       });
-    //     })
-    //     .catch(() => {});
-    // },
+    // 删除文章
+    deleteArt(id) {
+      console.log("移除标签");
+      this.$alert("确定删除该文章吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          let data = {
+            action: "deleteArt",
+            Art_id: id,
+          };
+          this.$store.dispatch("deleteArtById", data).then((res) => {
+            console.log("sccg");
+            //重新获取文章
+            let data2 = {
+              action: "AllArt",
+            };
+            this.$store.dispatch("getArticleList", data2);
+          });
+        })
+        .catch(() => {});
+    },
+
+    //修改文章按钮
+    changeArticle(id) {
+      this.$router.push("/publish/" + id);
+    },
+
+    //登录
+    login() {
+      this.$router.push("/login");
+    },
+    //注册
+    register() {
+      this.$router.push("/register");
+    },
+    //切换亮度
+    exchangeBrightness() {
+      this.$bus.$emit("exchangeBrightness");
+    },
+
+    //退出登录
+    signOut() {
+      if (!this.$store.state.user.userInfo.isLogin) {
+        this.$alert("您还未登录,是否登录", "提示", {
+          confirmButtonText: "确定",
+          type: "warning",
+          callback: (action) => {
+              this.$router.push("/login");
+          }
+          
+        });
+        return 
+      }
+      //清除token
+      localStorage.removeItem("username");
+      localStorage.removeItem("password");
+      localStorage.removeItem("isLogin");
+      //发起游客登录请求
+      this.$store.dispatch('visitor',{action: 'visitor'}).then(()=>{
+        this.$message({
+          message: '退出成功',
+          type: 'success'
+        });
+      })
+    },
   },
   computed: {
     ...mapState({
       allArticleList: (state) => state.article.allArticleList,
       allClassification: (state) => state.tagClassification.allClassification,
+      userInfo: (state) => state.user.userInfo,
     }),
   },
   mounted() {
@@ -252,9 +331,10 @@ export default {
 
   .tools {
     width: 100px;
-    height: 500px;
-    position: absolute;
-    right: 5%;
+    height: 50px;
+    position: fixed;
+    right: 1%;
+    bottom: 15%;
     background-color: rgb(18, 247, 255);
   }
   .pagination {
@@ -325,6 +405,25 @@ export default {
   &:hover {
     background-color: #ccc;
     color: black;
+  }
+}
+.elDrawer{
+  position: fixed;
+  top: 50%;
+  width: 100%;
+  height: 100px;
+  .function{
+    display: flex;
+    justify-content: space-around;
+    .options {
+      background-color: aqua;
+      border-radius: 5px;
+      margin-right: 10px;
+      cursor: pointer;
+      &:hover {
+        color: rgb(255, 255, 255);
+      }
+    }
   }
 }
 </style>

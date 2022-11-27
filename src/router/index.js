@@ -5,6 +5,7 @@ import login from '../views/login'
 import Home from '../views/home'
 import Publish from '../views/articles/publish'
 import OneArticle from '../views/articles/oneArticle'
+import MessageBoard from '../views/messageBoard'
 //引入仓库
 import store from '../store/index'
 
@@ -12,16 +13,21 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/messageboard',
+    component: MessageBoard
+  },
+  {
     path: '/onearticle',
     component: OneArticle,
     meta: {
-      isShowFooter:false,
+      isShowFooter: false,
       isShowHeader: true,
-      
+
     },
+   
   },
   {
-    path: '/publish',
+    path: '/publish/:id',
     component: Publish,
     meta: {
       isShowHeader: true,
@@ -34,7 +40,7 @@ const routes = [
     meta: {
       isShowHeader: false,
       isShowFooter: false,
-      
+
     }
   },
   {
@@ -43,29 +49,26 @@ const routes = [
     meta: {
       isShowHeader: false,
       isShowFooter: false,
-     
+
     }
   },
   {
     path: '/home',
     component: Home,
-    
-    beforeEnter: (to, from, next) => {
-     
-      // store.dispatch('getArticleList',{action: 'AllArt'})
-      next()
-      console.log('home');
-    }
   },
-  //重定向,默认显示登录页面,开发时先搞到home首页
+  //重定向,默认显示登录页面
   {
-    path:'/',
+    path: '/',
     redirect: '/home'
   }
 ]
 //
 const router = new VueRouter({
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    //返回的这个y值就是滚动条的位置，y=0为顶部
+    return { y: 0 }
+  }
 })
 
 export default router

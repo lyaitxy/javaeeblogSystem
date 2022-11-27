@@ -1,5 +1,6 @@
 //引入axios
 import axios from 'axios'
+import store from '../store'
 
 
 
@@ -12,6 +13,12 @@ const request = axios.create({
 //请求拦截器
 request.interceptors.request.use(config => {
   //在发送请求之前做些什么
+  console.log(store.state.user.userInfo.authorization); 
+  let token = store.state.user.userInfo.authorization
+  if (token) {
+    config.headers.Authorization = token
+  }
+  console.log("data信息",config.data);
   return config
 }, error => {
   //对请求错误做些什么

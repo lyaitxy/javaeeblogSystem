@@ -18,6 +18,7 @@ import {
   MessageBox,
   Select,
   Option,
+  Drawer,
 
 
 } from 'element-ui'
@@ -38,5 +39,7 @@ Vue.use(Carousel)
 Vue.use(CarouselItem)
 Vue.use(Select)
 Vue.use(Option)
+Vue.use(Drawer)
 Vue.prototype.$message = Message
 Vue.prototype.$alert = MessageBox.alert
+Vue.prototype.$confirm = MessageBox.confirm

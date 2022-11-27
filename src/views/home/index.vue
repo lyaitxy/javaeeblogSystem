@@ -206,7 +206,7 @@ export default {
 .inputTag{
   width: 300px;
   height: 60px;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

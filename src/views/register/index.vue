@@ -57,9 +57,9 @@ export default {
       date: new Date(),
       dataform: {
         action: "regist",
-        username: "sdadsa",
-        password: "sdadsa",
-        email: "sadsad@qq.com",
+        username: "",
+        password: "",
+        email: "",
         yzm: "",
       },
       rules: {
@@ -143,9 +143,8 @@ export default {
 
 <style lang="less" scoped>
 .register_container {
-  background-color: #93ba8ef2;
   height: 100vh;
-  background-image: url("/img/wyy7.png");
+  background-image: url("../../assets/img/Pirates.png");
   background-size: cover;
 }
 .register_box {

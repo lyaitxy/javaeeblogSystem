@@ -25,6 +25,9 @@
           <el-button type="primary" @click="login">登录</el-button>
           <el-button @click="resetFields">重置</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button class="noAccout" type="text" @click="goRegister">没有账号？去注册</el-button>
+        </el-form-item>
       </el-form>
     </div>
   </div>
@@ -61,18 +64,29 @@ export default {
     };
   },
   methods: {
+    
     login() {
       this.$refs.loginForm.validate((valid) => {
         if (valid === true) {
+          window.localStorage.setItem("username", this.loginForm.username);
+          window.localStorage.setItem("password", this.loginForm.password);
+          window.localStorage.setItem("isLogin", true);
           //发送请求，验证用户名和密码，若登录成功，跳转到首页
-          //this.$store.dispatch('login',)
-          this.$router.push("/home");
+          let data = {
+            action: "login",
+            username: this.loginForm.username,
+            password: this.loginForm.password,
+          };
+          this.$store.dispatch('login', data).then(() => {
+             this.$router.push("/home");
           this.$message({
             //可以关闭消息弹窗
             showClose: true,
             message: "登录成功",
             type: "success",
           });
+          })
+         
         } else {
           this.$message({
             showClose: true,
@@ -85,11 +99,20 @@ export default {
     resetFields() {
       this.$refs.loginForm.resetFields();
     },
+
+    goRegister() {
+      this.$router.push("/register");
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
+.noAccout{
+  position: relative;
+  left: 20px;
+  top: -10px;
+}
 .register_container {
   color: #fff;
   background-color: skyblue;

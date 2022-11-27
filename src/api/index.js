@@ -1,6 +1,17 @@
 //引入axios请求
 import request from './request'
 
+//游客
+export function reqgetVisitorList(data) {
+  return request({
+    url: '/user',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
 
 //注册新用户
 //...data : action=regist
@@ -18,9 +29,12 @@ export function reqRegister(data) {
 //登录
 export function reqLogin(data) {
   return request({
-    url: '/user/login',
+    url: '/user',
     method: 'post',
-    data
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   })
 }
 
@@ -49,7 +63,7 @@ export function reqArticleList(data) {
 }
 
 //获取指定文章
-export function reqFindById(data){
+export function reqFindById(data) {
   return request({
     url: '/blogs',
     method: 'post',
@@ -169,7 +183,7 @@ export function reqGetAllArticleCountByClassification(data) {
 }
 
 //获取所有标签
-export function reqGetAllTag(data){
+export function reqGetAllTag(data) {
   return request({
     url: '/blogs',
     method: 'post',
@@ -181,7 +195,7 @@ export function reqGetAllTag(data){
 }
 
 //新建标签
-export function reqCreateTag(data){
+export function reqCreateTag(data) {
   return request({
     url: '/blogs',
     method: 'post',
@@ -193,7 +207,7 @@ export function reqCreateTag(data){
 }
 
 //删除标签
-export function reqDeleteTag(data){
+export function reqDeleteTag(data) {
   return request({
     url: '/blogs',
     method: 'post',
@@ -205,7 +219,7 @@ export function reqDeleteTag(data){
 }
 
 //给文章添加标签
-export function reqAddTagForArt(data){
+export function reqAddTagForArt(data) {
   return request({
     url: '/blogs',
     method: 'post',
@@ -217,7 +231,7 @@ export function reqAddTagForArt(data){
 }
 
 //获取文章的所有标签
-export function reqGetAllTagForArt(data){
+export function reqGetAllTagForArt(data) {
   return request({
     url: '/blogs',
     method: 'post',
@@ -229,7 +243,7 @@ export function reqGetAllTagForArt(data){
 }
 
 //删除指定文章的指定标签
-export function reqDeleteTagForArt(data){
+export function reqDeleteTagForArt(data) {
   return request({
     url: '/blogs',
     method: 'post',
@@ -241,7 +255,7 @@ export function reqDeleteTagForArt(data){
 }
 
 //获取指定标签的所有文章
-export function reqGetAllArticleByTag(data){
+export function reqGetAllArticleByTag(data) {
   return request({
     url: '/blogs',
     method: 'post',
@@ -253,7 +267,7 @@ export function reqGetAllArticleByTag(data){
 }
 
 //获取指定标签的所有文章数量
-export function reqGetAllArticleCountByTag(data){
+export function reqGetAllArticleCountByTag(data) {
   return request({
     url: '/blogs',
     method: 'post',
@@ -264,6 +278,28 @@ export function reqGetAllArticleCountByTag(data){
   })
 }
 
+//删除文章
+export function reqDeleteArtById(data) {
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
 
+//修改文章
+export function reqUpdateArtById(data) {
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
 
 

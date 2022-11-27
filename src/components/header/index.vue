@@ -1,7 +1,7 @@
 <template>
   <div class="head">
     <!-- 标语 -->
-    <div class="word" @click="toHome">
+    <div class="projectName" @click="toHome">
       <a>个人博客</a>
     </div>
     <!-- 搜索框 -->
@@ -16,12 +16,12 @@
           <span class="iconfont icon-shouye"></span>
           <a @click="toHome">首页</a>
         </li>
-        <li>
+        <li v-show="this.$store.state.user.userInfo.isLogin">
           <a>
             <el-dropdown>
               <span class="el-dropdown-link">
                 <span class="iconfont icon-zuixinwenzhang_huaban"></span
-                ><span class="articleManage">文章管理</span>
+                ><span class="articleManage" >文章管理</span>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item icon="el-icon-plus">
@@ -30,17 +30,17 @@
                 </el-dropdown-item>
                 
                 <el-dropdown-item icon="el-icon-edit">
-                  <router-link to="#" class="publish">修改文章</router-link>
+                  <span class="publish" @click="more()" >更多</span>
                   </el-dropdown-item>
                 <el-dropdown-item icon="el-icon-delete">
-                  <router-link to="#" class="publish">删除文章</router-link>
+                  <span class="publish" @click="more()">更多</span>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </a>
         </li>
         <li><span class="iconfont icon-about"></span><a>关于</a></li>
-        <li><span class="iconfont icon-liuyan"></span><a>留言</a></li>
+        <li @click="toMessage()"><span class="iconfont icon-liuyan"></span><a>留言</a></li>
       </ul>
     </div>
   </div>
@@ -64,15 +64,39 @@ export default {
       let data = {
         action: "searchArt",
         keyword: this.keyword,
+        page: 1,
       };
-      this.$store.dispatch("searchArticle", data);
-      this.keyword = "";
+      this.$store.dispatch("searchArticle", data).then(() => {
+        this.keyword = "";
+        this.$router.push("/home");
+      });
+      
+    },
+    // 更多
+    more() {
+      this.$message({
+        message: "功能正在开发中",
+        type: "warning",
+      });
+    },
+    // 跳转到留言页面
+    toMessage() {
+      //跳转到留言页面
+      this.$router.push('/messageboard');
     },
   },
+  
 };
 </script>
 
 <style lang="less" scoped>
+.projectName{
+  font-size: 30px;
+  font-weight: bold;
+  color: #fff;
+  margin-left: 20px;
+  cursor: pointer;
+}
 .head {
   width: 100%;
   height: 50px;
@@ -110,7 +134,7 @@ export default {
 }
 .menu {
   position: absolute;
-  right: 0;
+  right: 50px;
   top: 0;
   .item {
     display: flex;

@@ -1,4 +1,4 @@
-import {reqValidationPhoto, reqRegister, reqLogin} from '../../api'
+import {reqValidationPhoto, reqRegister, reqLogin, reqgetVisitorList} from '../../api'
 
 const state = {
   registerInfo: {},
@@ -10,7 +10,7 @@ const mutations = {
   },
   REGISTERUSER(state, registerInfo) {
     state.registerInfo = registerInfo;
-  }
+  },
 }
 const actions = {
   //注册新用户
@@ -22,14 +22,19 @@ const actions = {
 
   //登录
   async login({commit}, data) {
-    const result = await reqLogin(data);
-    console.log(result);
-    if (result.code === 200) {
-      commit('USERLOGIN', result.data)
-    } else {
-      return Promise.reject(new Error('failed'))
-    }
-  }
+    await reqLogin(data).then((res) =>{
+      commit('USERLOGIN', res.data)
+      console.log("登录",res);
+    });
+    // console.log(result);
+  },
+
+  //游客
+  async visitor({commit}, data) {
+    const result = await reqgetVisitorList(data);
+    console.log("游客信息",result);
+    commit('USERLOGIN',result.data)
+  },
 
 
 
