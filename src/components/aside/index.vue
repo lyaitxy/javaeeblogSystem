@@ -116,12 +116,13 @@ export default {
   },
   computed: {
     ...mapState({
-      allTag: (state) => state.tagClassification.allTag.data,
+      allTag: (state) => state.tagClassification.allTag.data || [],
     }),
   },
   mounted() {
     //获取所有标签
-    this.$store.dispatch("getAllTag", { action: "allTag" });
+    this.$store.dispatch("getAllTag", { action: "allTag" })
+    
   },
   methods: {
     createTag() {

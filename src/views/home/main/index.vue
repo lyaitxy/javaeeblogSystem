@@ -146,7 +146,6 @@ export default {
   },
   mounted() {
     //获取文章总数
-    console.log("获取文章总数请求触发");
     this.$store.dispatch("getArticleCount", { action: "allArtCount" });
     //获取所有分类名  
     this.$store.dispatch("getAllClassification", {action: "showClassify"});

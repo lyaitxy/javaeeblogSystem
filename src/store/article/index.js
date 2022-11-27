@@ -35,7 +35,8 @@ const actions = {
   async getArticleList({commit}, data) {
     
     let result = await reqArticleList(data);
-    console.log('所有文章',result.data);
+    console.log(6666,result);
+    console.log('所有文章111',result.data);
     if (result.status === 200){
       commit('GETARTICLELIST', result.data.data)
     }

@@ -22,8 +22,9 @@ export default {
   },
   mounted() {
     //发请求获取文章数据
-    console.log('获取所有文章触发');
-    this.$store.dispatch('getArticleList',{action: 'AllArt'})
+    this.$store.dispatch('getArticleList',{action: 'AllArt'}).then(() =>{
+      console.log('获取所有文章触发11');
+    })
   },
 }
 </script>

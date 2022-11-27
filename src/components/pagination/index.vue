@@ -1,15 +1,15 @@
 <template>
   <div class="pagination">
     <button @click="upOnePage" :disabled="currentPage===1">上一页</button>
-    <button @click="changePage(1)" :class="{active:currentPage===1}" v-if="currentPage > 4">1</button>
-    <button v-if="currentPage > 4">...</button>
+    <button @click="changePage(1)" :class="{active:currentPage===1}" v-if="currentPage > 5">1</button>
+    <button v-if="currentPage > 5">...</button>
 
   
     <button @click="changePage(page)" :class="{active:currentPage===page}" v-for="(page , index) in pageList.end" :key="index" v-show="page >= pageList.start">
       {{page}}
     </button>
     <button v-if="currentPage <= totalPage-4 && totalPage > 6">...</button>
-    <button @click="changePage(totalPage)" v-if="currentPage < totalPage-3">{{totalPage}}</button>
+    <button @click="changePage(totalPage)" v-if="currentPage < totalPage-4">{{totalPage}}</button>
     <button >共{{articleCount}}篇</button>
     <button @click="downOnePage" :disabled='currentPage===totalPage'>下一页</button>
     
@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     ...mapState({
-      articleCount: state => state.article.allArticleList.length,
+      articleCount: state => state.article.articleCount,
     }),
     //总共多少页
     totalPage() {
