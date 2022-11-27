@@ -27,7 +27,7 @@
             </div>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
-                <div class="iconfont icon-biaoqian">{{ tag.tag_name }}</div>
+                <div class="iconfont icon-biaoqian" @click="getAllArticleByTag(tag.tag_name)">{{ tag.tag_name }}</div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -41,7 +41,7 @@
               :key="index"
               v-show="index >= 4"
             >
-              <div class="iconfont icon-biaoqian">{{ tag.tag_name }} <span class="el-icon-remove iconRemove2" @click="deleteTag(tag.tag_name)"></span></div>
+              <div class="iconfont icon-biaoqian" @click="getAllArticleByTag(tag.tag_name)">{{ tag.tag_name }} <span class="el-icon-remove iconRemove2" @click="deleteTag(tag.tag_name)"></span></div>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -151,7 +151,15 @@ export default {
     },
     //根据标签获取文章
     getAllArticleByTag(tagName) {
-      this.$bus.$emit("getAllArticleByTag", tagName);
+      //获取标签下的文章总数
+      let data = {
+        action: "allArtCountOfTag",
+        tag_name: tagName,
+      }
+      this.$store.dispatch('getAllArticleCountByTag',data).then(() => {
+        this.$bus.$emit("getAllArticleByTag", tagName);
+      })
+      
     },
   },
 };

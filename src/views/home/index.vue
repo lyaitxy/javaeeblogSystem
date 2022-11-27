@@ -65,6 +65,7 @@ export default {
     ...mapState({
       allArticleList: (state) => state.article.allArticleList || [],
       allTag: (state) => state.tagClassification.allTag.data || [],
+      allTagOfArt: (state) => state.tagClassification.allTagForArt.data || [],
     }),
   },
   mounted() {
@@ -90,18 +91,38 @@ export default {
         if (this.value) {
           console.log(666);
           //发起加入标签请求
-          this.$store.dispatch("addTagForArt", {
-            action: "addTagForArt",
+          //不能加入已存在的标签
+          let data5 = {
+            action: "allTagOfArt",
             Art_id: this.art_id,
-            tag_name: this.value,
-          }).then((res) => {
-            //刷新标签
-            this.$store.dispatch('getArticleList',{action: 'AllArt'})
-          });
-          this.$refs.inputTag.style.display = "none";
-          this.isOpacity = !this.isOpacity; 
-          this.newTag = true;
-          this.art_id = 0;
+          }
+          this.$store.dispatch("getAllTagForArt",data5).then(() => {
+            let isRepeated = false;
+            this.allTagOfArt.forEach((item) => {
+              if (item.tag_name === this.value) {
+                isRepeated = true;
+              }
+            });
+            if (isRepeated) {
+              this.$message({
+                message: "该文章已有该标签",
+                type: "warning",
+              })
+              return ;
+            }
+            this.$store.dispatch("addTagForArt", {
+              action: "addTagForArt",
+              Art_id: this.art_id,
+              tag_name: this.value,
+            }).then((res) => {
+              //刷新标签
+              this.$store.dispatch('getArticleList',{action: 'AllArt'})
+            });
+            this.$refs.inputTag.style.display = "none";
+            this.isOpacity = !this.isOpacity; 
+            this.newTag = true;
+            this.art_id = 0;
+          })
         } else {
           this.$message({
             message: "请选择标签",

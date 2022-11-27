@@ -4,7 +4,8 @@ import {
   reqCreateTag,
   reqDeleteTag,
   reqAddTagForArt,
-  reqDeleteTagForArt} from '../../api'
+  reqDeleteTagForArt,
+  reqGetAllTagForArt} from '../../api'
 
 const state = {
   allClassification: [],
@@ -17,6 +18,9 @@ const mutations = {
   },
   GETALLTAG(state, allTag) {
     state.allTag = allTag;
+  },
+  GETALLTAGFORART(state, allTagForArt) {
+    state.allTagForArt = allTagForArt;
   }
 }
 const actions = {
@@ -62,6 +66,14 @@ const actions = {
   async deleteTagForArt({commit}, data) {
     await reqDeleteTagForArt(data).then(res => {
       console.log("删除指定文章的指定标签", res.data);
+    });
+  },
+
+  //获取指定文章的所有标签
+  async getAllTagForArt({commit}, data) {
+    await reqGetAllTagForArt(data).then(res => {
+      console.log("获取指定文章的所有标签", res.data);
+      commit("GETALLTAGFORART", res.data);
     });
   }
 }

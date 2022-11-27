@@ -84,18 +84,6 @@ export function reqSearch(data) {
   })
 }
 
-//展示指定页的文章
-export function reqShowPage(data) {
-  return request({
-    url: '/blogs',
-    method: 'post',
-    data,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  })
-}
-
 //发表评论
 export function reqDeclareRemark(data) {
   return request({
@@ -168,6 +156,18 @@ export function reqGetAllArticleByClassification(data) {
   })
 }
 
+//获取指定分类的所有文章数量
+export function reqGetAllArticleCountByClassification(data) {
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
 //获取所有标签
 export function reqGetAllTag(data){
   return request({
@@ -216,6 +216,18 @@ export function reqAddTagForArt(data){
   })
 }
 
+//获取文章的所有标签
+export function reqGetAllTagForArt(data){
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
 //删除指定文章的指定标签
 export function reqDeleteTagForArt(data){
   return request({
@@ -239,5 +251,19 @@ export function reqGetAllArticleByTag(data){
     }
   })
 }
+
+//获取指定标签的所有文章数量
+export function reqGetAllArticleCountByTag(data){
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
+
 
 

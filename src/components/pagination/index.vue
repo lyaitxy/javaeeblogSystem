@@ -27,12 +27,14 @@ export default {
   },
   watch: {
     currentPage() {
+      //页数变化时,传当前页
+      this.$bus.$emit('currentPage', this.currentPage)
       //如果标签名不为空，就是查询标签下的文章
       if (this.tag_name) {
         let data = {
           action: 'allArtOfTag',
           tag_name: this.tag_name,
-          currentPage: this.currentPage
+          page: this.currentPage
         }
         this.$store.dispatch('getAllArticleByTag', data)
       } else {
@@ -103,6 +105,10 @@ export default {
           page: this.currentPage
         }
         this.$store.dispatch('getAllArticleByTag',data2)
+    })
+    this.$bus.$on('clickAll',() => {
+      this.tag_name = '';
+      this.currentPage = 1;
     })
   }
 }

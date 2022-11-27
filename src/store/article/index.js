@@ -4,14 +4,16 @@ import {
   reqPublish, 
   reqArticleCount,
   reqSearch,
-  reqShowPage,
   reqGetAllArticleByClassification,
-  reqGetAllArticleByTag} from '../../api'
+  reqGetAllArticleByTag,
+  reqGetAllArticleCountByTag,
+  reqGetAllArticleCountByClassification} from '../../api'
 const state = {
   allArticleList: [],
   oneArticle: {},
   articleCount: 0,
-  searchArticleList: []
+  searchArticleList: [],
+  allArtCountByTag: 0,
 }
 const mutations = {
   //获取所有文章列表
@@ -70,11 +72,6 @@ const actions = {
       commit('GETARTICLELIST', result.data.data)
     }
   },
-  //获取指定页的文章
-  async showPage({commit}, data) {
-    let result = await reqShowPage(data)
-    console.log('获取指定页的文章',result);
-  },
   //获取指定分类的文章
   async getAllArticleByClassification({commit}, data) {
     await reqGetAllArticleByClassification(data).then(res => {
@@ -83,11 +80,27 @@ const actions = {
     })
   },
 
+  //获取指定分类的文章数量
+  async getAllArticleCountByClassification({commit}, data) {
+    await reqGetAllArticleCountByClassification(data).then(res => {
+      console.log('获取指定分类的文章数量',res.data);
+      commit('GETARTICLECOUNT', res.data.data)
+    })
+  },
+
   //获取指定标签的文章
   async getAllArticleByTag({commit}, data) {
     await reqGetAllArticleByTag(data).then(res => {
       console.log('获取指定标签的文章',res);
       commit('GETARTICLELIST', res.data.data)
+    })
+  },
+
+  //获取指定标签的文章数量
+  async getAllArticleCountByTag({commit}, data) {
+    await reqGetAllArticleCountByTag(data).then(res => {
+      console.log('获取指定标签的文章数量',res.data);
+      commit('GETARTICLECOUNT', res.data.data)
     })
   }
 }

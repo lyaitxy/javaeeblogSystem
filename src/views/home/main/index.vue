@@ -3,9 +3,15 @@
     <!-- 分类展示行 -->
     <div class="classify">
       <!-- 默认全部被选中 -->
-      <div :class="{'active': isFirst=== -1}" @click="all">全部</div>
-      <div :class="{'active': isFirst===index}" @click="getClassificationArticle($event, index)" v-for="(classification, index) in allClassification" :key="index">{{classification.classify_name}}</div>
-      
+      <div :class="{ active: isFirst === -1 }" @click="all">全部</div>
+      <div
+        :class="{ active: isFirst === index }"
+        @click="getClassificationArticle($event, index)"
+        v-for="(classification, index) in allClassification"
+        :key="index"
+      >
+        {{ classification.classify_name }}
+      </div>
     </div>
     <!-- 文章时间线 -->
     <div class="time">
@@ -16,30 +22,40 @@
             placement="top"
             v-for="article in allArticleList"
             :key="article.article_id"
-            
           >
-          
             <el-card class="article">
-              <div >
-                <h4 class="title" @click="detailArticle(article.article_id)">{{ article.title }}</h4>
+              <div>
+                <h4 class="title" @click="detailArticle(article.article_id)">
+                  {{ article.title }}
+                </h4>
                 <div class="artTags">
-                  <div v-for="(artTag,index) in article.tags" :key="index">
-                  <div  class="tag iconfont icon-biaoqian">{{artTag.tag_name}}<span class="el-icon-remove removeButton" @click="removeArtTag(article.article_id, artTag.tag_name)"></span></div>
+                  <div v-for="(artTag, index) in article.tags" :key="index">
+                    <div class="tag iconfont icon-biaoqian">
+                      {{ artTag.tag_name
+                      }}<span
+                        class="el-icon-remove removeButton"
+                        @click="
+                          removeArtTag(article.article_id, artTag.tag_name)
+                        "
+                      ></span>
+                    </div>
                   </div>
-                  
                 </div>
-                <p class="content" @click="detailArticle(article.article_id)">{{ article.descr }}</p>
-                
+                <p class="content" @click="detailArticle(article.article_id)">
+                  {{ article.descr }}
+                </p>
               </div>
             </el-card>
             <div class="buttonGroup">
               <span class="operatorArticle">删除文章</span>
               <span class="operatorArticle">修改文章</span>
-              <span class="operatorArticle" @click="articleAddTag(article.article_id)">加入标签</span>
+              <span
+                class="operatorArticle"
+                @click="articleAddTag(article.article_id)"
+                >加入标签</span
+              >
             </div>
-            
           </el-timeline-item>
-          
         </el-timeline>
       </div>
       <!--  分页器 -->
@@ -64,6 +80,7 @@ export default {
   data() {
     return {
       isFirst: -1,
+      curClassification: "",
     };
   },
   components: {
@@ -73,7 +90,10 @@ export default {
     // 获取全部文章
     all() {
       this.isFirst = -1;
-      this.$store.dispatch('getArticleList',{action: 'AllArt'})
+      this.$store.dispatch("getArticleList", { action: "AllArt" }).then(() => {
+        this.$store.dispatch("getArticleCount", { action: "allArtCount" });
+      });
+      this.$bus.$emit("clickAll");
     },
     //根据id获取文章详情
     detailArticle(id) {
@@ -82,7 +102,7 @@ export default {
         article_id: id,
         action: "findById",
       };
-      
+
       this.$store.dispatch("findById", data).then(() => {
         //获取文章的评论数
         let data2 = {
@@ -90,27 +110,31 @@ export default {
           action: "allCommand",
         };
         this.$store.dispatch("getAllRemark", data2).then(() => {
-          
           //等请求完成后再跳转
           console.log(6666);
-           this.$router.push("/onearticle");
+          this.$router.push("/onearticle");
         });
       });
-      
-      
-      
     },
     //根据分类获取文章
     getClassificationArticle(event, index) {
       this.isFirst = index;
+      //保留当前分类，为点击页数时使用
+      this.curClassification = event.target.innerText;
       let data = {
         action: "showArtForClassify",
         claName: event.target.innerText,
+        page: 1,
       };
-      this.$store.dispatch("getAllArticleByClassification", data);
+      this.$store.dispatch("getAllArticleByClassification", data).then(() => {
+        this.$store.dispatch("getAllArticleCountByClassification", {
+          action: "allClaNum",
+          claName: event.target.innerText,
+        });
+      });
     },
     articleAddTag(id) {
-      this.$bus.$emit("changeTransparency",id);
+      this.$bus.$emit("changeTransparency", id);
     },
 
     //移除文章的标签
@@ -133,22 +157,53 @@ export default {
             this.all();
           });
         })
-        .catch(() => {
-        });
+        .catch(() => {});
     },
+
+    // // 删除文章
+    // deleteArt(id) {
+    //   console.log("移除标签");
+    //   this.$alert("确定删除该标签吗？", "提示", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     type: "warning",
+    //   })
+    //     .then(() => {
+    //       console.log(art_id, tag_name);
+    //       let data = {
+    //         action: "deleteArticle",
+    //         Art_id: art_id,
+    //       };
+    //       this.$store.dispatch("deleteTagForArt", data).then((res) => {
+    //         //获取所有标签
+    //         this.all();
+    //       });
+    //     })
+    //     .catch(() => {});
+    // },
   },
   computed: {
     ...mapState({
       allArticleList: (state) => state.article.allArticleList,
       allClassification: (state) => state.tagClassification.allClassification,
-     
     }),
   },
   mounted() {
     //获取文章总数
     this.$store.dispatch("getArticleCount", { action: "allArtCount" });
-    //获取所有分类名  
-    this.$store.dispatch("getAllClassification", {action: "showClassify"});
+    //获取所有分类名
+    this.$store.dispatch("getAllClassification", { action: "showClassify" });
+
+    this.$bus.$on("currentPage", (page) => {
+      if (this.curClassification) {
+        let data = {
+          action: "showArtForClassify",
+          claName: this.curClassification,
+          page: page,
+        };
+        this.$store.dispatch("getAllArticleByClassification", data);
+      }
+    });
   },
 };
 </script>
@@ -156,7 +211,7 @@ export default {
 <style lang="less" scoped>
 .body {
   display: flex;
-  .classify{
+  .classify {
     position: relative;
     top: -60px;
     left: 21%;
@@ -164,7 +219,7 @@ export default {
     height: 30px;
     border-radius: 6px;
     div {
-      background-color: rgba(183,168,168,0.3);
+      background-color: rgba(183, 168, 168, 0.3);
       line-height: 30px;
       width: 50px;
       text-align: center;
@@ -174,7 +229,7 @@ export default {
       justify-content: space-around;
       align-items: center;
       border-radius: 6px;
-      &.active{
+      &.active {
         background-color: #ccc;
         color: black;
         cursor: pointer;
@@ -212,13 +267,13 @@ export default {
 .content {
   height: 30px;
 }
-.article{
-  &:hover{
+.article {
+  &:hover {
     box-shadow: 0 0 10px #ccc;
   }
   cursor: pointer;
 }
-.artTags{
+.artTags {
   cursor: pointer;
   position: absolute;
   top: 32px;
@@ -235,21 +290,21 @@ export default {
     margin-bottom: 6px;
   }
 }
-.removeButton{
+.removeButton {
   float: left;
   position: relative;
   top: -5px;
   left: 104%;
   z-index: 999;
   color: rgb(167, 240, 245);
-  &:hover{
+  &:hover {
     color: rgb(255, 0, 0);
   }
 }
-.el-timeline-item{
+.el-timeline-item {
   padding-bottom: 0px;
 }
-.buttonGroup{
+.buttonGroup {
   width: 200px;
   display: flex;
   flex-direction: column;
@@ -257,21 +312,19 @@ export default {
   top: -60px;
   left: 101%;
 }
-  .operatorArticle{
+.operatorArticle {
   text-align: center;
   width: 70px;
   font-size: 10px;
   border-radius: 8px;
   border: #fff;
   cursor: pointer;
-  background-color: rgba(183,168,168,0.3);
+  background-color: rgba(183, 168, 168, 0.3);
   color: #fff;
   margin: 3px 0 0 0;
-  &:hover{
+  &:hover {
     background-color: #ccc;
     color: black;
   }
 }
-
-
 </style>
