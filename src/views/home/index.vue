@@ -94,6 +94,9 @@ export default {
             action: "addTagForArt",
             Art_id: this.art_id,
             tag_name: this.value,
+          }).then((res) => {
+            //刷新标签
+            this.$store.dispatch('getArticleList',{action: 'AllArt'})
           });
           this.$refs.inputTag.style.display = "none";
           this.isOpacity = !this.isOpacity; 
@@ -108,9 +111,25 @@ export default {
       }
       //如果art_id = 0，说明是新建标签
       else {
-        if (this.tagName) {
-          console.log(666);
-          this.$store.dispatch("addTag", { action: "createTag", tag_name: this.tagName });
+        if (this.tagName.trim()) {
+          // console.log(this.allTag);
+          let isRepeated = false;
+          for (let arr of this.allTag) {
+            if (arr.tag_name === this.tagName.trim()) {
+              isRepeated = true;
+            }
+          } 
+          if (isRepeated) {
+            this.$message({
+              message: "新建标签与旧标签重复",
+              type: "warning"
+            })
+            return 
+          }
+          this.$store.dispatch("addTag", { action: "createTag", tag_name: this.tagName.trim() }).then((res) => {
+            //获取所有标签
+            this.$store.dispatch(this.$store.dispatch("getAllTag", { action: "allTag" }))
+          });
           this.$refs.inputTag.style.display = "none";
           this.isOpacity = !this.isOpacity;
           this.tagName = "";
@@ -174,7 +193,6 @@ export default {
   background-color: rgb(153, 237, 223);
   border-radius: 8px;
   text-align: center;
-  margin-left: 5px;
   z-index: 999;
   box-shadow: 0 0 20px #ccc;
   input{

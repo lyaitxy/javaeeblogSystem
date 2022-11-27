@@ -125,7 +125,7 @@ export default {
           console.log(art_id, tag_name);
           let data = {
             action: "delTagForArt",
-            art_id: art_id,
+            Art_id: art_id,
             tag_name: tag_name,
           };
           this.$store.dispatch("deleteTagForArt", data).then((res) => {

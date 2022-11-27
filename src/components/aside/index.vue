@@ -33,7 +33,7 @@
           </el-dropdown>
         </li>
         
-        <el-dropdown>
+        <el-dropdown v-show="allTag.length > 4">
           <span class="el-dropdown-link el-icon-more newTag"></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
@@ -41,7 +41,7 @@
               :key="index"
               v-show="index >= 4"
             >
-              <div class="iconfont icon-biaoqian">{{ tag.tag_name }}</div>
+              <div class="iconfont icon-biaoqian">{{ tag.tag_name }} <span class="el-icon-remove iconRemove2" @click="deleteTag(tag.tag_name)"></span></div>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -208,9 +208,9 @@ export default {
   }
 }
 .tagName{
-  width: 100%;
-  height: 100%;
-  font-size: 12px;
+  width: 30px;
+  height: 20px;
+  font-size: 14px;
   -webkit-transform: scale(0.8);
   // text-align: center;
   // line-height: 30px;
@@ -253,6 +253,13 @@ export default {
   top: -6px;
   &:hover {
     color: rgb(247, 0, 0);
+    box-shadow: 0 0 10px #ccc;
+  }
+}
+.iconRemove2{
+  font-size: 12px;
+  &:hover {
+    color: red;
     box-shadow: 0 0 10px #ccc;
   }
 }
