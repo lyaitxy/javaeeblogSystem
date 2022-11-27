@@ -215,6 +215,9 @@ export default {
       justify-content: space-around;
       align-items: center;
       border-radius: 6px;
+      &:hover {
+        background-color: #666;
+      }
       &.active {
         background-color: #ccc;
         color: black;

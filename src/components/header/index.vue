@@ -1,13 +1,24 @@
 <template>
   <div class="head">
     <!-- 标语 -->
-    <div class="word" @click="toHome">
+    <div
+      class="word"
+      @click="toHome"
+    >
       <a>个人博客</a>
     </div>
     <!-- 搜索框 -->
     <div class="search">
-      <input type="text" placeholder="请输入关键字" class="word" v-model="keyword" />
-      <button class="btn" @click="search">搜索</button>
+      <input
+        type="text"
+        placeholder="请输入关键字"
+        class="word"
+        v-model="keyword"
+      />
+      <button
+        class="btn"
+        @click="search"
+      >搜索</button>
     </div>
     <!-- 导航栏 -->
     <div class="menu">
@@ -20,20 +31,27 @@
           <a>
             <el-dropdown>
               <span class="el-dropdown-link">
-                <span class="iconfont icon-zuixinwenzhang_huaban"></span
-                ><span class="articleManage">文章管理</span>
+                <span class="iconfont icon-zuixinwenzhang_huaban"></span><span class="articleManage">文章管理</span>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item icon="el-icon-plus">
-                  <router-link to="/publish" class="publish"
-                    >发布文章</router-link>
+                  <router-link
+                    to="/publish"
+                    class="publish"
+                  >发布文章</router-link>
                 </el-dropdown-item>
-                
+
                 <el-dropdown-item icon="el-icon-edit">
-                  <router-link to="#" class="publish">修改文章</router-link>
-                  </el-dropdown-item>
+                  <router-link
+                    to="#"
+                    class="publish"
+                  >修改文章</router-link>
+                </el-dropdown-item>
                 <el-dropdown-item icon="el-icon-delete">
-                  <router-link to="#" class="publish">删除文章</router-link>
+                  <router-link
+                    to="#"
+                    class="publish"
+                  >删除文章</router-link>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -50,33 +68,35 @@
 export default {
   data() {
     return {
-      keyword: "",
-    };
+      keyword: ''
+    }
   },
   methods: {
     toHome() {
-      this.$router.push("/home");
+      this.$router.push('/home')
     },
     publish() {
-      this.$router.push("/publish");
+      this.$router.push('/publish')
     },
     search() {
       let data = {
-        action: "searchArt",
-        keyword: this.keyword,
-      };
-      this.$store.dispatch("searchArticle", data);
-      this.keyword = "";
-    },
-  },
-};
+        action: 'searchArt',
+        keyword: this.keyword
+      }
+      this.$store.dispatch('searchArticle', data)
+      this.keyword = ''
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
 .head {
+  position: relative;
+  top: 0;
   width: 100%;
   height: 50px;
-  background-color: transparent;
+  background-color: #33cdf3 !important;
   .search {
     position: absolute;
     left: 40%;
@@ -84,13 +104,13 @@ export default {
     .btn {
       width: 50px;
       height: 30px;
-      background-color: rgba(183,168,168,0.3);
+      background-color: rgba(183, 168, 168, 0.3);
       color: #fff;
       border: none;
       border-radius: 5px;
       margin: 0 0 0 10px;
       cursor: pointer;
-      
+
       &:hover {
         color: #000;
         background-color: #ccc;

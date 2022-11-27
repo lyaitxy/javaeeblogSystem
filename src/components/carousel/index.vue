@@ -2,9 +2,15 @@
   <div>
     <div class="block">
       <el-carousel height="150px">
-        <el-carousel-item v-for="item in data" :key="item.id">
+        <el-carousel-item
+          v-for="item in data"
+          :key="item.id"
+        >
           <!-- <h3 class="small">{{ item }}</h3> -->
-          <img :src="item.img" class="img">
+          <img
+            :src="item.img"
+            class="img"
+          >
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -12,7 +18,7 @@
 </template>
 <script>
 export default {
-  props: ["data"]
+  props: ['data']
 }
 </script>
 <style>
@@ -34,5 +40,8 @@ export default {
 .img {
   height: 100%;
   width: 100%;
+}
+.carousel {
+  width: 100% !important;
 }
 </style>

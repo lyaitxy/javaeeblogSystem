@@ -229,6 +229,7 @@ export default {
 
   .contents {
     color: #fff;
+    padding: 20px;
     //换行
     white-space: pre-wrap;
   }
@@ -242,6 +243,9 @@ div {
   height: 30px;
   line-height: 30px;
   color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 15px;
 }
 //粘性定位的评论框
 
@@ -283,7 +287,7 @@ div {
   .remarkContent {
     width: 720px;
     // float: left! important;
-    font-size: 28px;
+    font-size: 18px !important;
     overflow: hidden !important;
     text-overflow: ellipsis;
     white-space: normal;
