@@ -92,11 +92,12 @@ export default {
 
 <style lang="less" scoped>
 .head {
-  position: relative;
+  position: fixed;
   top: 0;
   width: 100%;
   height: 50px;
   background-color: #33cdf3 !important;
+  z-index: 9999;
   .search {
     position: absolute;
     left: 40%;
@@ -119,11 +120,13 @@ export default {
     .word {
       width: 200px;
       height: 25px;
+      border-radius: 5px;
       a {
         cursor: pointer;
       }
       &:focus {
         outline: rgb(80, 242, 40) solid 1px;
+        border: 2px solid transparent;
       }
     }
   }
