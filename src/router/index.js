@@ -22,9 +22,20 @@ const routes = [
     meta: {
       isShowFooter: false,
       isShowHeader: true,
-
     },
-   
+    beforeEnter: (to, from, next) => {
+     
+      console.log("跳转到oneArticle了");
+      next()
+    }
+  },
+  {
+    path: '/publish',
+    component: Publish,
+    meta: {
+      isShowHeader: true,
+      isShowFooter: true,
+    }
   },
   {
     path: '/publish/:id',

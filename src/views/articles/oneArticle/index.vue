@@ -10,25 +10,38 @@
         <!-- 评论数 -->
         <span class="remarkNum">评论数({{ allRemark.length }})</span>
         <!-- 点赞数 -->
-        <span class="likeNum">点赞数({{ likeNum }}) <span class="iconfont icon-dianzan dianzan"></span> <span class="iconfont icon-dianzan_kuai"></span> </span>
+        <span class="likeNum"
+          >点赞数({{ likeNum }})
+          <span
+            class="iconfont icon-dianzan dianzan"
+            @click="like"
+            v-show="!isLike"
+          ></span>
+          <span
+            @click="disLike"
+            class="iconfont icon-dianzan_kuai dianzan"
+            v-show="isLike"
+          ></span>
+        </span>
       </div>
       <div v-highlight autodetect>
         <div v-html="compiledMarkdown" class="contents"></div>
-        <div class="name">---{{name}}</div>
+        <div class="name">---{{ name }}</div>
       </div>
-      
+
       <!-- 评论区 -->
       <div class="remark">评论</div>
 
       <ul class="remarkList">
         <li v-for="(remark, index) in allRemark" :key="index">
-          <span class="remarkName">名字</span>
+          <span class="remarkName">{{name}}</span>
           <span class="remarkTime">{{ remark.createTime }}</span>
 
           <div>
             <span class="remarkContent">{{ remark.comment }}</span>
             <div>
               <button class="reply" @click="reply(remark)">回复</button>
+              <button class="delete" @click="deleteRemark(remark.comm_id)">删除评论</button>
             </div>
           </div>
 
@@ -36,13 +49,19 @@
           <div v-show="remark.replyCount">
             <ul>
               <li v-for="(reply, index) in remark.replyComm" :key="index">
+
                 <div class="replyRemark">
                   <div class="replyRemarkHead">
                     <span class="replyRemarkName">{{ reply.name }}</span>
                     <span class="replyRemarkTime">{{ reply.createTme }}</span>
                   </div>
-                  <div class="replyRemarkContent">{{ reply.comment }}</div>
+                  <div class="replyRemarkContent" >{{ reply.comment }} </div>
                 </div>
+
+                <div>
+                 <button class="delete" @click="delReply(reply.rep_comm_id)">删除回复</button>
+                </div>
+
               </li>
             </ul>
           </div>
@@ -54,8 +73,9 @@
       </ul>
       <div class="occupy"></div>
       <div :class="{ remarkFrame: isFixed }">
-        <div class="remark">{{ replyObj }}</div>
+        <div class="remark1">{{ replyObj }}</div>
         <el-input
+          class="declareInput"
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 6 }"
           placeholder="请输入内容"
@@ -90,6 +110,7 @@ export default {
       isFixed: true,
       //获取向下滚动条到底部的距离
       scrollHeight: 0,
+      isLike: false,
     };
   },
   components: {
@@ -97,18 +118,19 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      title: (state) => state.article.oneArticle[0].title || [],
-      content: (state) => state.article.oneArticle[0].contents,
-      artId: (state) => state.article.oneArticle[0].article_id,
-      allRemark: (state) => state.commentLike.allRemark.data || [],
-      likeNum: (state) => state.article.oneArticle[0].zan,
-      name: (state) => state.article.oneArticle[0].name,
-    }),
+    allRemark: () => {
+      console.log("oneArticle页面中的",JSON.parse(localStorage.getItem("allRemark")));
+      return JSON.parse(localStorage.getItem("allRemark")) || []
+    },
+    title: () => JSON.parse(window.localStorage.getItem("title")),
+    artId: () => JSON.parse(window.localStorage.getItem("artId")),
+    likeNum: () => JSON.parse(window.localStorage.getItem("zan")),
+    name: () => JSON.parse(window.localStorage.getItem("name")),
     compiledMarkdown() {
-      return marked.parse(this.content);
+      return marked.parse(JSON.parse(window.localStorage.getItem("contents")));
     },
   },
+  
   methods: {
     //获取所有评论
     getAllRemark() {
@@ -122,7 +144,7 @@ export default {
     //发表评论
     declare() {
       //判断是否登录
-      if (!this.$store.state.user.isLogin) {
+      if (!window.localStorage.getItem("isLogin") == "true") {
         this.$alert("请先登录", "提示", {
           confirmButtonText: "确定",
           callback: (action) => {
@@ -167,6 +189,33 @@ export default {
         type: "success",
       });
     },
+    //删除评论
+    deleteRemark(id) {
+      this.$alert("确定删除吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: (action) => {
+          if (action === "confirm") {
+            let data = {
+              action: "delComm",
+              comm_id: id,
+            };
+            this.$store.dispatch("deleteRemark", data).then(() => {
+              this.getAllRemark();
+            });
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+          }
+        },
+      });
+
+    },
+
+
+    
     //取消评论
     cancel() {
       this.comment = "";
@@ -179,7 +228,78 @@ export default {
       this.replyObj = `回复: ${name}`;
       this.action = "replyComm";
     },
+    //删除回复
+    delReply(id){
+      this.$alert("确定删除吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: (action) => {
+          if (action === "confirm") {
+            let data = {
+              action: "delReply",
+              rep_comm_id: id,
+            };
+            this.$store.dispatch("deleteReply", data).then(() => {
+              this.getAllRemark();
+            });
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+          }
+        },
+      });
+    
+    },
+    //点赞
+    like() {
+      console.log("文章id",this.artId);
+      let id = this.artId;
+      this.$store.dispatch('like',{action: 'like', Art_id: id}).then(() => {
+      
+      let data = {
+        article_id: id,
+        action: "findById",
+      };
+
+      this.$store.dispatch("findById", data).then(() => {
+        //获取文章的评论数
+        let data2 = {
+          Art_id: id,
+          action: "allCommand",
+        };
+        this.$store.dispatch("getAllRemark", data2).then(() => {
+           this.isLike = !this.isLike
+        });
+      })
+    })
+    },
+
+    disLike() {
+      let id = this.artId;
+      console.log("文章id",id);
+      this.$store.dispatch('cancelLike',{action: 'dislike', Art_id: id}).then(() => {
+        console.log("取消点赞");
+        let data = {
+          article_id: id,
+          action: "findById",
+        };
+        this.$store.dispatch("findById", data).then(() => {
+          //获取文章的评论数
+          let data2 = {
+            Art_id: id,
+            action: "allCommand",
+          };
+          this.$store.dispatch("getAllRemark", data2).then(() => {
+            this.isLike = !this.isLike
+          });
+      
+        })
+        },
+      )}
   },
+
 };
 </script>
 
@@ -188,7 +308,8 @@ export default {
   text-align: right;
 }
 //点赞
-.dianzan{
+.dianzan {
+  cursor: pointer;
 }
 //评论区占位
 .occupy {
@@ -210,7 +331,7 @@ export default {
 }
 .remarkNum {
   position: relative;
-  left: 60%;
+  left: 62%;
   top: -45px;
   font-size: 12px;
   color: rgb(255, 255, 255);
@@ -227,9 +348,9 @@ export default {
   width: 65%;
 
   .contents {
-    color: #fff;
     //换行
     white-space: pre-wrap;
+    padding: 30px;
   }
 }
 div {
@@ -242,6 +363,13 @@ div {
   line-height: 30px;
   color: #fff;
 }
+.remark1{
+  background-color: rgba(183, 168, 168, 0.3);
+  width: 91%;
+  height: 30px;
+  line-height: 30px;
+  color: #fff;
+}
 //粘性定位的评论框
 
 .remarkFrame {
@@ -249,6 +377,9 @@ div {
   position: fixed;
   bottom: 0px;
   width: 820px;
+}
+.declareInput{
+  width: 91%;
 }
 .remarkList {
   background-color: rgba(183, 168, 168, 0.3);
@@ -277,7 +408,25 @@ div {
     background-color: skyblue;
     color: rgb(255, 255, 255);
     position: relative;
-    left: 600px;
+    left: 520px;
+    &:hover {
+      background-color: rgb(255, 255, 255);
+      color: skyblue;
+    }
+  }
+  .delete{
+    cursor: pointer;
+    outline: skyblue;
+    border: 1px solid skyblue;
+    border-radius: 8px;
+    background-color: skyblue;
+    color: rgb(255, 255, 255);
+    position: relative;
+    left: 550px;
+    &:hover {
+      background-color: rgb(255, 255, 255);
+      color: skyblue;
+    }
   }
   .remarkContent {
     width: 720px;
@@ -286,17 +435,19 @@ div {
     text-overflow: ellipsis;
     white-space: normal;
     position: relative;
+    word-break: break-all;
     left: -5%;
     color: rgb(230, 227, 67);
     font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
       "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
     font-size: 14px;
+    
   }
 }
 .publishandcancel {
   width: 100px;
   position: relative;
-  left: 80%;
+  left: 72%;
   button {
     outline: skyblue;
     border: 1px solid skyblue;
@@ -306,5 +457,19 @@ div {
     margin: 0 0 0 20px;
     cursor: pointer;
   }
+}
+.replyRemarkContent{
+  width: 700px;
+  // float: left! important;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  white-space: normal;
+  position: relative;
+  left: -5%;
+  color: rgb(230, 227, 67);
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  word-break: break-all;
 }
 </style>

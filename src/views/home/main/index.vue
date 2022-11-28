@@ -131,7 +131,7 @@ export default {
     },
     //根据id获取文章详情
     detailArticle(id) {
-      console.log(id);
+      console.log("根据id显示具体文章",id);
       let data = {
         article_id: id,
         action: "findById",
@@ -145,8 +145,23 @@ export default {
         };
         this.$store.dispatch("getAllRemark", data2).then(() => {
           //等请求完成后再跳转
-          console.log(6666);
-          this.$router.push("/onearticle");
+          console.log(666666666666666);
+          let oneArticle = this.$store.state.article.oneArticle
+          window.localStorage.setItem("title", JSON.stringify(oneArticle[0].title))
+          window.localStorage.setItem("artId", JSON.stringify(oneArticle[0].article_id))
+          window.localStorage.setItem("contents", JSON.stringify(oneArticle[0].contents))
+          window.localStorage.setItem("name", JSON.stringify(oneArticle[0].name))
+          window.localStorage.setItem("zan", JSON.stringify(oneArticle[0].zan))
+          let allRemark = this.$store.state.commentLike.allRemark.data
+          window.localStorage.setItem("allRemark", JSON.stringify(allRemark))
+          let url = "http://localhost:8080/#/onearticle"
+          // setTimeout(() => {
+          //   window.location.reload()
+          // },100)
+          window.location.assign(url)
+
+         
+          
         });
       });
     },

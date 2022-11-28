@@ -58,6 +58,7 @@ export default {
       this.$router.push("/home");
     },
     publish() {
+      
       this.$router.push("/publish");
     },
     search() {
@@ -68,7 +69,9 @@ export default {
       };
       this.$store.dispatch("searchArticle", data).then(() => {
         this.keyword = "";
-        this.$router.push("/home");
+        if (this.$route.path !== "/home") {
+          this.$router.push("/home");
+        }
       });
       
     },
@@ -100,14 +103,15 @@ export default {
 .projectName{
   font-size: 30px;
   font-weight: bold;
-  color: #fff;
+  color: rgb(186, 172, 172);
   margin-left: 20px;
   cursor: pointer;
 }
 .head {
   width: 100%;
   height: 50px;
-  background-color: transparent;
+  background-color: rgba(183, 168, 168, 0.3);
+  
   .search {
     position: absolute;
     left: 40%;
@@ -116,7 +120,7 @@ export default {
       width: 50px;
       height: 30px;
       background-color: rgba(183,168,168,0.3);
-      color: #fff;
+      color: rgb(82, 235, 71);
       border: none;
       border-radius: 5px;
       margin: 0 0 0 10px;

@@ -134,6 +134,18 @@ export function reqDeclareRemark(data) {
   })
 }
 
+//用户删除评论
+export function reqDeleteRemark(data) {
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
 //获取当前文章的所有评论
 export function reqGetAllRemarK(data) {
   return request({
@@ -148,6 +160,18 @@ export function reqGetAllRemarK(data) {
 
 //回复评论
 export function reqReplyRemark(data) {
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
+//删除回复
+export function reqDeleteReply(data) {
   return request({
     url: '/blogs',
     method: 'post',
@@ -355,6 +379,31 @@ export function reqGetAllMessage(data) {
 export function reqGetUserInfo(data) {
   return request({
     url: '/user',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
+
+//点赞
+export function reqLike(data) {
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
+//取消点赞
+export function reqCancelLike(data) {
+  return request({
+    url: '/blogs',
     method: 'post',
     data,
     headers: {

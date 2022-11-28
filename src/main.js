@@ -30,6 +30,32 @@ Vue.directive('highlight',function(el){
 Vue.prototype.$hljs = hljs
 
 
+import { marked } from 'marked'
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  langPrefix: 'hljs language-',
+  highlight: function (code, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(lang, code).value;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    return hljs.highlightAuto(code).value;
+  },
+  //尽可能地兼容github的markdown
+  pedantic: true,
+  gfm: true,
+  //是否支持Github换行符
+  breaks: true,
+  
+  sanitize: false,
+  smartLists: true,
+  smartypants: false,
+  xhtml: false
+}); 
+
 Vue.config.productionTip = false
 
 new Vue({

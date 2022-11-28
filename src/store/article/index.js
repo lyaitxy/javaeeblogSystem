@@ -28,6 +28,7 @@ const mutations = {
   //获取指定文章
   FINDBYID(state, oneArticle) {
     state.oneArticle = oneArticle;
+   
   },
   //获取所有文章数量
   GETARTICLECOUNT(state, articleCount) {
@@ -54,11 +55,12 @@ const actions = {
   },
   //获取指定文章
   async findById({ commit }, data) {
-    let result = await reqFindById(data);
-    console.log("获取指定文章", result);
-    if (result.status === 200) {
-      commit("FINDBYID", result.data.data)
-    }
+    await reqFindById(data).then(res => {
+      let oneArticle = res.data.data
+     
+
+      commit('FINDBYID', oneArticle)
+    })
   },
   //发布文章
   async PublishArticle({ commit }, data) {
@@ -75,6 +77,7 @@ const actions = {
   //搜索文章
   async searchArticle({ commit }, data) {
     let result = await reqSearch(data)
+    console.log("搜索文章", result);
     console.log('搜索文章', result.data.data);
     if (result.status === 200) {
       commit('GETARTICLELIST', result.data.data)

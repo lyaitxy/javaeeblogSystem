@@ -9,7 +9,7 @@
       <!-- 用户名 -->
       <div class="name">{{userInfo.name}}</div>
       <!-- 加入标签 -->
-      <div class="collet" v-show="isLogin === 'true'">
+      <div class="collet" v-show="isLogin()">
         <li
           class="biaoqian"
           v-for="(tag, index) in allTag"
@@ -53,8 +53,8 @@
     <!-- 公告 -->
     <div class="notice">
       <span class="iconfont icon-gonggaoxiaolaba"></span>
-      待完成
-      <div>登录注册，小工具栏，修改删除文章</div>
+      公告
+      <div>完善功能，优化网站</div>
     </div>
     <!-- 热门文章 -->
     <div class="hot">
@@ -62,7 +62,7 @@
       热门文章
       <!-- 轮播图 -->
       <div class="carousel">
-        <Carousel :data="data" />
+        <Carousel :data="hotArticle" />
       </div>
     </div>
     <!-- 推荐文章 -->
@@ -71,7 +71,7 @@
       推荐文章
       <!-- 轮播图 -->
       <div class="carousel">
-        <Carousel :data="data" />
+        <Carousel :data="hotArticle" />
       </div>
     </div>
   </div>
@@ -119,17 +119,20 @@ export default {
     ...mapState({
       allTag: (state) => state.tagClassification.allTag.data || [],
       userInfo: (state) => state.user.userInfo || {},
-      isLogin: (state) => window.localStorage.getItem("isLogin"),
       hotArticle: (state) => state.article.hotArticleList || [],
     }),
-   
+    
   },
   mounted() {
     //获取所有标签
     this.$store.dispatch("getAllTag", { action: "allTag" })
-    
+  
   },
   methods: {
+    isLogin() {
+      console.log("侧边栏",window.localStorage.getItem("isLogin")== 'true');
+      return window.localStorage.getItem("isLogin") === "true";
+    },
     createTag() {
       //定义全局事件总线，让透明度变低
       this.$bus.$emit("changeTransparency");
@@ -288,8 +291,9 @@ export default {
   .carousel {
     box-sizing: border-box;
     border-radius: 0 0 8px 8px;
-    width: 220px;
-    height: 160px;
+    // width: 220px;
+    width: 100%;
+    height: 150px;
     background-color: #fff;
   }
 }
@@ -302,6 +306,7 @@ export default {
   text-align: center;
 }
 .recommondArticles {
+  // widows: 100%;
   height: 180px;
   background-color: skyblue;
   border-radius: 8px;
@@ -311,8 +316,9 @@ export default {
   .carousel {
     box-sizing: border-box;
     border-radius: 0 0 8px 8px;
-    width: 220px;
-    height: 160px;
+    // width: 220px;
+    width: 100%;
+    height: 150px;
     background-color: #fff;
   }
 }

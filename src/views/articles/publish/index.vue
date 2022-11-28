@@ -45,6 +45,9 @@ export default {
           contents,
         };
         this.$store.dispatch("PublishArticle", data).then(() => {
+          this.contents = "";
+          this.title = "";
+          this.desc = "";
           this.$store.dispatch("getArticleList", { action: "AllArt" });
         });
       }
