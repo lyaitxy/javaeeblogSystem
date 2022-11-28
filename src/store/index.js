@@ -11,7 +11,8 @@ import article from './article'
 import commentLike from './commentLike'
 //引入标签和分类的小仓库
 import tagClassification from './tagClassification'
-
+//引入留言板的小仓库
+import messageBoard from './messageBoard'
 
 
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     user,
     article,
     commentLike,
-    tagClassification
+    tagClassification,
+    messageBoard
   }
 })

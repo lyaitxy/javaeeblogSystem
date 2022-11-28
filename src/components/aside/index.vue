@@ -4,12 +4,12 @@
     <div class="self">
       <!-- 头像区 -->
       <div>
-        <img src="../../assets/img/avarta.png" class="img" />
+        <img :src="userInfo.touxiang" class='img' />
       </div>
       <!-- 用户名 -->
-      <div class="name">{{userInfo.username}}</div>
+      <div class="name">{{userInfo.name}}</div>
       <!-- 加入标签 -->
-      <div class="collet" v-show="userInfo.isLogin">
+      <div class="collet" v-show="isLogin === 'true'">
         <li
           class="biaoqian"
           v-for="(tag, index) in allTag"
@@ -109,6 +109,7 @@ export default {
           img: "https://img-blog.csdnimg.cn/20200527153605959.png",
         },
       ],
+      
     };
   },
   components: {
@@ -118,7 +119,10 @@ export default {
     ...mapState({
       allTag: (state) => state.tagClassification.allTag.data || [],
       userInfo: (state) => state.user.userInfo || {},
+      isLogin: (state) => window.localStorage.getItem("isLogin"),
+      hotArticle: (state) => state.article.hotArticleList || [],
     }),
+   
   },
   mounted() {
     //获取所有标签

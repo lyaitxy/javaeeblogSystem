@@ -86,6 +86,30 @@ export function reqArticleCount(data) {
   })
 }
 
+//查询文章是否是当前用户的
+export function reqIsMyArticle(data) {
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
+//获取最热文章
+export function reqHotArticle(data) {
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
 //搜索文章
 export function reqSearch(data) {
   return request({
@@ -302,4 +326,39 @@ export function reqUpdateArtById(data) {
   })
 }
 
+//发表留言
+export function reqDeclareMessage(data) {
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
 
+//获取留言信息
+export function reqGetAllMessage(data) {
+  return request({
+    url: '/blogs',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
+
+//获取登录之后的用户信息(带token)
+export function reqGetUserInfo(data) {
+  return request({
+    url: '/user',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}

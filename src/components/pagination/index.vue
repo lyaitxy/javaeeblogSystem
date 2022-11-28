@@ -2,7 +2,7 @@
   <div class="pagination">
     <button @click="upOnePage" :disabled="currentPage===1">上一页</button>
     <button @click="changePage(1)" :class="{active:currentPage===1}" v-if="currentPage > 5">1</button>
-    <button v-if="currentPage > 5">...</button>
+    <button v-if="currentPage > 6">...</button>
 
   
     <button @click="changePage(page)" :class="{active:currentPage===page}" v-for="(page , index) in pageList.end" :key="index" v-show="page >= pageList.start">

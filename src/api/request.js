@@ -13,10 +13,9 @@ const request = axios.create({
 //请求拦截器
 request.interceptors.request.use(config => {
   //在发送请求之前做些什么
-  console.log(store.state.user.userInfo.authorization); 
-  let token = store.state.user.userInfo.authorization
+  let token = window.localStorage.getItem('token')
   if (token) {
-    config.headers.Authorization = token
+    config.headers.authorization = token
   }
   console.log("data信息",config.data);
   return config

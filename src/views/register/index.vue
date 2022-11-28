@@ -35,7 +35,7 @@
         <el-form-item label="验证码" class="YZM">
           <el-input v-model="dataform.yzm" class="yzm_input"></el-input>
           <img
-            :src="`http://192.168.0.100:10003/Blogs/yzm.jpg?a=${date}`"
+            :src="`http://124.223.6.87:8084/SpringBlogs/yzm.jpg?a=${date}`"
             class="photo"
           />
           <a class="nextPhoto" @click="changePhoto">看不清，换一张</a>
@@ -44,6 +44,7 @@
         <el-form-item>
           <el-button type="primary" @click="register">注册</el-button>
           <el-button @click="resetFields">重置</el-button>
+          <el-button @click="login">去登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -136,6 +137,9 @@ export default {
     changePhoto() {
       //点击换一张，刷新验证码
       this.date = new Date();
+    },
+    login() {
+      this.$router.push("/login");
     },
   },
 };

@@ -16,7 +16,7 @@
           <span class="iconfont icon-shouye"></span>
           <a @click="toHome">首页</a>
         </li>
-        <li v-show="this.$store.state.user.userInfo.isLogin">
+        <li v-show="isLogin === 'true'">
           <a>
             <el-dropdown>
               <span class="el-dropdown-link">
@@ -81,11 +81,18 @@ export default {
     },
     // 跳转到留言页面
     toMessage() {
-      //跳转到留言页面
+      
+      //获取留言信息
+      console.log(666);
+      this.$store.dispatch('getAllMessage',{action:'viewMsg'}).then(()=>{
+        //跳转到留言页面
       this.$router.push('/messageboard');
+      })
     },
   },
-  
+  computed: {
+    isLogin: () => window.localStorage.getItem("isLogin"),
+  },
 };
 </script>
 

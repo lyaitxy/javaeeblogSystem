@@ -46,7 +46,7 @@
                 </p>
               </div>
             </el-card>
-            <div class="buttonGroup" v-show="userInfo.isLogin">
+            <div class="buttonGroup" v-show="parseInt(userInfo.user_id) === article.user_id">
               <span
                 class="operatorArticle"
                 @click="deleteArt(article.article_id)"
@@ -63,6 +63,8 @@
                 >加入标签</span
               >
             </div>
+
+
           </el-timeline-item>
         </el-timeline>
       </div>
@@ -111,7 +113,8 @@ export default {
       isFirst: -1,
       curClassification: "",
       drawer: false,
-      direction: "rtl"
+      direction: "rtl",
+      isMyArticle: false
     };
   },
   components: {
@@ -236,7 +239,7 @@ export default {
 
     //退出登录
     signOut() {
-      if (!this.$store.state.user.userInfo.isLogin) {
+      if (!this.isLogin) {
         this.$alert("您还未登录,是否登录", "提示", {
           confirmButtonText: "确定",
           type: "warning",
@@ -248,23 +251,26 @@ export default {
         return 
       }
       //清除token
-      localStorage.removeItem("username");
-      localStorage.removeItem("password");
-      localStorage.removeItem("isLogin");
+      window.localStorage.setItem("isLogin", false);
       //发起游客登录请求
       this.$store.dispatch('visitor',{action: 'visitor'}).then(()=>{
+        //打印游客信息
+        console.log("游客信息",this.$store.state.user);
         this.$message({
           message: '退出成功',
           type: 'success'
         });
+        this.$router.push("/login");
       })
     },
+
   },
   computed: {
     ...mapState({
       allArticleList: (state) => state.article.allArticleList,
       allClassification: (state) => state.tagClassification.allClassification,
       userInfo: (state) => state.user.userInfo,
+      isLogin: (state) => window.localStorage.getItem("isLogin"),
     }),
   },
   mounted() {
@@ -283,6 +289,9 @@ export default {
         this.$store.dispatch("getAllArticleByClassification", data);
       }
     });
+
+    
+    
   },
 };
 </script>

@@ -10,6 +10,7 @@ import {
   reqGetAllArticleCountByClassification,
   reqDeleteArtById,
   reqUpdateArtById,
+  reqHotArticle
 } from '../../api'
 const state = {
   allArticleList: [],
@@ -17,6 +18,7 @@ const state = {
   articleCount: 0,
   searchArticleList: [],
   allArtCountByTag: 0,
+  hotArticleList: []
 }
 const mutations = {
   //获取所有文章列表
@@ -31,6 +33,9 @@ const mutations = {
   GETARTICLECOUNT(state, articleCount) {
     state.articleCount = articleCount
   },
+  HOTARTICLE(state, hotArticleList) {
+    state.hotArticleList = hotArticleList
+  }
 
 
 
@@ -118,6 +123,15 @@ const actions = {
   async updateArtById({ commit }, data) {
     await reqUpdateArtById(data).then(res => {
       console.log('修改文章', res);
+    })
+  },
+
+
+  //获取最热文章
+  async getHotArticle({ commit }, data) {
+    await reqHotArticle(data).then(res => {
+      console.log('获取最热文章', res);
+      commit('HOTARTICLE', res.data.data)
     })
   }
 }

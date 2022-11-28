@@ -27,6 +27,7 @@
         </el-form-item>
         <el-form-item>
           <el-button class="noAccout" type="text" @click="goRegister">没有账号？去注册</el-button>
+          <el-button class="directIn" type="text" @click="directIn">以游客身份进入</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -68,8 +69,8 @@ export default {
     login() {
       this.$refs.loginForm.validate((valid) => {
         if (valid === true) {
-          window.localStorage.setItem("username", this.loginForm.username);
-          window.localStorage.setItem("password", this.loginForm.password);
+          // window.localStorage.setItem("username", this.loginForm.username);
+          // window.localStorage.setItem("password", this.loginForm.password);
           window.localStorage.setItem("isLogin", true);
           //发送请求，验证用户名和密码，若登录成功，跳转到首页
           let data = {
@@ -78,6 +79,7 @@ export default {
             password: this.loginForm.password,
           };
           this.$store.dispatch('login', data).then(() => {
+            window.localStorage.setItem("token", this.$store.state.user.userInfo.authorization);
              this.$router.push("/home");
           this.$message({
             //可以关闭消息弹窗
@@ -103,14 +105,27 @@ export default {
     goRegister() {
       this.$router.push("/register");
     },
+    directIn() {
+      //以游客身份进入
+      window.localStorage.setItem("isLogin", false);
+      this.$store.dispatch('visitor', {action: 'visitor'}).then(() => {
+        window.localStorage.setItem("token", this.$store.state.user.userInfo.authorization);
+        this.$router.push("/home");
+      })
+    }
   },
 };
 </script>
 
 <style lang="less" scoped>
+.directIn{
+  position: relative;
+  left: 80px;
+  top: -50px;
+}
 .noAccout{
   position: relative;
-  left: 20px;
+  left: -50px;
   top: -10px;
 }
 .register_container {

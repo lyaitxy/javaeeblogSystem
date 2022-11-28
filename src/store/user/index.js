@@ -1,4 +1,4 @@
-import {reqValidationPhoto, reqRegister, reqLogin, reqgetVisitorList} from '../../api'
+import {reqValidationPhoto, reqRegister, reqLogin, reqgetVisitorList, reqGetUserInfo} from '../../api'
 
 const state = {
   registerInfo: {},
@@ -28,6 +28,14 @@ const actions = {
     });
     // console.log(result);
   },
+  //获取登录用户信息(带token)
+  async getVisitorList({commit}, data) {
+    await reqGetUserInfo(data).then((res) =>{
+      commit('USERLOGIN', res.data)
+      console.log("登录(带token)",res);
+    });
+  },
+
 
   //游客
   async visitor({commit}, data) {
