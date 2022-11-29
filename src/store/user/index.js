@@ -7,6 +7,9 @@ const state = {
 const mutations = {
   USERLOGIN(state, userInfo) {
     state.userInfo = userInfo
+    // setTimeout(() => {
+    //   window.location.reload()
+    // }, 1)
   },
   REGISTERUSER(state, registerInfo) {
     state.registerInfo = registerInfo;

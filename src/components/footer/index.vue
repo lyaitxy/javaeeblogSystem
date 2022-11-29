@@ -13,11 +13,11 @@
               <span class="space"></span>
             </li>
             <li>
-              项目文档
+              <a href="https://github.com/lyaitxy/javaeeblogSystem">前端地址</a>
               <span class="space"></span>
             </li>
             <li>
-              项目地址
+              <a href="https://blog.csdn.net/m0_53422850/article/details/127853433?spm=1001.2014.3001.5502">后端接口</a>
               <span class="space"></span>
             </li>
             <li>友情链接</li>
@@ -70,6 +70,13 @@ export default {};
         text-align: center;
       }
     }
+  }
+}
+a{
+  color: #999;
+  text-decoration: none;
+  &:hover {
+    color: #1890ff;
   }
 }
 </style>

@@ -49,6 +49,11 @@ export default {
 
     //获取最热文章
     this.$store.dispatch('getHotArticle',{action:'hot'})
+    //刷新一次
+    // if (location.href.indexOf("#reloaded") == -1) {
+    //   location.href = location.href + "#reloaded";
+    //   location.reload();
+    // }
   },
 }
 </script>

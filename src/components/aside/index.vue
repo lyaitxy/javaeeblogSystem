@@ -62,7 +62,7 @@
       热门文章
       <!-- 轮播图 -->
       <div class="carousel">
-        <Carousel :data="hotArticle" />
+        <Carousel :data="hotArticle" :hot="true"  :list="[33,32,29,27,26,28,23,24]"/>
       </div>
     </div>
     <!-- 推荐文章 -->

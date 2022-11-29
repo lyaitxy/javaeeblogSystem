@@ -20,7 +20,11 @@ const mutations = {
     
     setTimeout(() => {
       window.location.reload()
-    }, 100)
+      if (JSON.parse(localStorage.getItem("scrollY")) !== 0) {
+        console.log(666666666666666666666666);
+        window.scrollTo(0,JSON.parse(localStorage.getItem("scrollY")))
+      }
+    }, 1)
   },
   //获取当前评论的所有回复
   GETALLREPLY(state, allReply) {

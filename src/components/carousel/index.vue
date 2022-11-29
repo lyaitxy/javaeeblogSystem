@@ -2,10 +2,8 @@
   <div>
     <div class="block">
       <el-carousel indicator-position="none" height="150px">
-        <el-carousel-item  v-for="item in data" :key="item.id" v-show="item.id < 4">
-          
-          <img :src="item.img" class="img">
-          <h3 class="small">{{ item.title }}</h3>
+        <el-carousel-item  v-for="item in items" :key="item.id" >
+          <a :href="`http://localhost:8080/#/onearticle/${item.article_id}`"><img :src="item.img" class="img"></a>
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -13,7 +11,20 @@
 </template>
 <script>
 export default {
-  props: ["data"]
+  props: ["data","hot"],
+  computed: {
+    items() {
+      console.log(this.hot);
+      if (this.hot) {
+        console.log(this.data.slice(0, 3));
+        return this.data.slice(0, 3);
+      } else {
+        console.log(this.data.slice(3, 6));
+        return this.data.slice(3, 6);
+      }
+    
+    }
+  },
 }
 </script>
 <style>
@@ -35,21 +46,8 @@ export default {
 .img {
   height: 100%;
   width: 100%;
-  cursor: pointer;
+
  
 
-}
-.small{
-  position:absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 100px;
-  height: 30px;
-  line-height: 30px;
-  color: rgb(0, 0, 0) !important;
-  text-align: center;
-  
-  z-index: 222;
 }
 </style>

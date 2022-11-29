@@ -300,6 +300,25 @@ export default {
       )}
   },
 
+  
+  mounted() {
+    localStorage.setItem("scrollY",window.scrollY)
+    //记录滚动条的位置
+    window.addEventListener("scroll", () =>{
+      // console.log("滚动条的位置",window.scrollY);
+      localStorage.setItem("scrollY",window.scrollY)
+      //让滚动条回到原位
+      console.log("滚动条的位置",JSON.parse(localStorage.getItem("scrollY")));
+      // window.scrollTo(0,window.scrollY)
+     
+    });
+    // console.log("dom元素",this.$refs.oneArticle.scrollTop);
+    // sessionStorage.setItem("scrollTop", this.$refs.oneArticle.scrollTop);
+    // if (location.herf.indexOf("#reloaded") == -1) {
+    //   location.herf = location.herf + "#reloaded";
+    //   location.reload();
+    // }
+  },
 };
 </script>
 

@@ -102,8 +102,9 @@ export default {
         if (valid === true) {
           //发送请求，向数据库添加数据，若注册成功，跳转到登录页面
 
-          this.$store.dispatch("registerUser", this.dataform);
-          if (this.$store.state.user.registerInfo.errCode === 0) {
+          this.$store.dispatch("registerUser", this.dataform).then(() => {
+            this.date = new Date();
+            if (this.$store.state.user.registerInfo.errCode === 0) {
             this.$message({
               //可以关闭消息弹窗
               showClose: true,
@@ -117,11 +118,13 @@ export default {
             this.$message({
               //可以关闭消息弹窗
               showClose: true,
-              message: this.$store.state.user.registerInfo.msg,
+              message: `${this.$store.state.user.registerInfo.msg}`,
               type: "error",
             });
             return false;
           }
+          });
+          
         } else {
           //提示错误信息
           this.$message({

@@ -17,16 +17,44 @@ const routes = [
     component: MessageBoard
   },
   {
-    path: '/onearticle',
+    path: '/onearticle/:id',
     component: OneArticle,
     meta: {
       isShowFooter: false,
       isShowHeader: true,
     },
     beforeEnter: (to, from, next) => {
-     
-      console.log("跳转到oneArticle了");
-      next()
+        if (JSON.parse(localStorage.getItem('artId')) == to.params.id) {
+          next()
+        } else {
+        //拿到id
+        let id = to.params.id
+        let data = {
+          article_id: id,
+          action: "findById",
+        };
+
+        store.dispatch("findById", data).then(() => {
+          //获取文章的评论数
+          let data2 = {
+            Art_id: id,
+            action: "allCommand",
+          };
+          store.dispatch("getAllRemark", data2).then(() => {
+            //等请求完成后再跳转
+            console.log(666666666666666);
+            let oneArticle = store.state.article.oneArticle
+            window.localStorage.setItem("title", JSON.stringify(oneArticle[0].title))
+            window.localStorage.setItem("artId", JSON.stringify(oneArticle[0].article_id))
+            window.localStorage.setItem("contents", JSON.stringify(oneArticle[0].contents))
+            window.localStorage.setItem("name", JSON.stringify(oneArticle[0].name))
+            window.localStorage.setItem("zan", JSON.stringify(oneArticle[0].zan))
+            let allRemark = store.state.commentLike.allRemark.data
+            window.localStorage.setItem("allRemark", JSON.stringify(allRemark))
+            next()
+          })
+        })
+      }
     }
   },
   {

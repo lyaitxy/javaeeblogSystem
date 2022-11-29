@@ -22,13 +22,15 @@
             placement="top"
             v-for="article in allArticleList"
             :key="article.article_id"
+            class="timeline-item"
           >
             <el-card class="article">
               <div>
                 <h4 class="title" @click="detailArticle(article.article_id)">
                   {{ article.title }}
                 </h4>
-                <div class="artTags">
+
+                <div class="artTags" v-show="isLogin">
                   <div v-for="(artTag, index) in article.tags" :key="index">
                     <div class="tag iconfont icon-biaoqian">
                       {{ artTag.tag_name
@@ -41,25 +43,29 @@
                     </div>
                   </div>
                 </div>
+
                 <p class="content" @click="detailArticle(article.article_id)">
                   {{ article.descr }}
                 </p>
               </div>
             </el-card>
-            <div class="buttonGroup" v-show="parseInt(userInfo.user_id) === article.user_id">
+            <div class="buttonGroup" >
               <span
                 class="operatorArticle"
                 @click="deleteArt(article.article_id)"
+                v-show="parseInt(userInfo.user_id) === article.user_id"
                 >删除文章</span
               >
               <span
                 class="operatorArticle"
                 @click="changeArticle(article.article_id)"
+                v-show="parseInt(userInfo.user_id) === article.user_id"
                 >修改文章</span
               >
               <span
                 class="operatorArticle"
                 @click="articleAddTag(article.article_id)"
+                v-show="isLogin"
                 >加入标签</span
               >
             </div>
@@ -154,11 +160,13 @@ export default {
           window.localStorage.setItem("zan", JSON.stringify(oneArticle[0].zan))
           let allRemark = this.$store.state.commentLike.allRemark.data
           window.localStorage.setItem("allRemark", JSON.stringify(allRemark))
-          let url = "http://localhost:8080/#/onearticle"
+          
+
+          
           // setTimeout(() => {
           //   window.location.reload()
           // },100)
-          window.location.assign(url)
+          this.$router.push(`/onearticle/${id}`);
 
          
           
@@ -241,7 +249,14 @@ export default {
 
     //登录
     login() {
-      this.$router.push("/login");
+      if (JSON.parse(window.localStorage.getItem("isLogin"))) {
+        this.$message({
+          message: "您已登录",
+          type: "warning",
+        });
+      } else {
+        this.$router.push("/login");
+      }
     },
     //注册
     register() {
@@ -285,7 +300,7 @@ export default {
       allArticleList: (state) => state.article.allArticleList,
       allClassification: (state) => state.tagClassification.allClassification,
       userInfo: (state) => state.user.userInfo,
-      isLogin: (state) => window.localStorage.getItem("isLogin"),
+      isLogin: (state) => JSON.parse(window.localStorage.getItem("isLogin")),
     }),
   },
   mounted() {
@@ -317,7 +332,7 @@ export default {
   .classify {
     position: relative;
     top: -60px;
-    left: 21%;
+    left: 16%;
     display: flex;
     height: 30px;
     border-radius: 6px;
@@ -345,7 +360,7 @@ export default {
     }
   }
   .time {
-    width: 40%;
+    width: 43%;
     height: 700px;
     position: absolute;
     left: 30%;
@@ -450,4 +465,5 @@ export default {
     }
   }
 }
+
 </style>

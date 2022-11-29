@@ -9,7 +9,7 @@
       {{page}}
     </button>
     <button v-if="currentPage <= totalPage-4 && totalPage > 6">...</button>
-    <button @click="changePage(totalPage)" v-if="currentPage < totalPage-4">{{totalPage}}</button>
+    <button @click="changePage(totalPage)" v-if="currentPage <= totalPage-4">{{totalPage}}</button>
     <button >共{{articleCount}}篇</button>
     <button @click="downOnePage" :disabled='currentPage===totalPage'>下一页</button>
     
